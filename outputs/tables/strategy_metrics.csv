@@ -1,0 +1,2 @@
+Train period,Validation period,Test period,Selection universe,Final pairs,Entry Z,Exit Z,Z window,Transaction cost per position change,Total Return,CAGR,Annualized Volatility,Sharpe,Sortino,Max Drawdown,Calmar
+2017-11-17 to 2020-12-31,2021-01-01 to 2023-12-29,2024-01-01 to 2026-03-20,NIFTY 50 price dataset supplied with project,6,2.5,0.25,60,0.0005,0.04367404581244094,0.019779064945924407,0.03183291714818755,0.6311788637103564,0.9009319161704639,-0.021751485436679374,0.9093201934876186
