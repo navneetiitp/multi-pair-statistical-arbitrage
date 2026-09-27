@@ -1,66 +1,76 @@
 # Multi-Pair Statistical Arbitrage Portfolio
 
-A reproducible research implementation of a multi-pair statistical arbitrage strategy on the supplied NIFTY 50 daily price dataset.
+A reproducible quantitative research implementation of a **multi-pair statistical arbitrage portfolio** on NIFTY 50 daily price data.
 
-## What was rebuilt
+The project extends single-pair pairs trading into a portfolio setting by screening multiple candidate pairs, validating their out-of-sample behavior, selecting a final pair set, and evaluating the resulting portfolio on an untouched test period.
 
-The original project selected cointegrated pairs and evaluated many pairs across the full sample. This version separates model development, validation, and final evaluation to reduce look-ahead bias.
+---
 
-### Pipeline
+## Research Objective
 
-1. Use the 2017–2020 training period to screen candidate pairs.
-2. Filter candidates using return correlation and the Engle–Granger cointegration test.
-3. Estimate log-price OLS hedge ratios using training data.
-4. Evaluate candidate pairs on 2021–2023 validation data.
-5. Select the final pair subset and tune trading thresholds using validation data only.
-6. Freeze the model before running the untouched 2024–2026 test period.
-7. Shift signals by one trading day and deduct 5 bps per unit of position change.
+The first stage of the research focused on a single cointegrated pair.
 
-## Final test results
+This project asks a broader question:
 
-| Metric | Result |
-|---|---:|
-| Total return | 4.37% |
-| CAGR | 1.98% |
-| Annualized volatility | 3.18% |
-| Sharpe ratio | 0.63 |
-| Sortino ratio | 0.90 |
-| Maximum drawdown | -2.18% |
-| Calmar ratio | 0.91 |
+> **Can multiple statistically related equity pairs be combined into a portfolio while maintaining strict separation between model development, validation, and final out-of-sample evaluation?**
 
-These are historical backtest results, not live trading performance or a guarantee of future returns.
+The research focuses on:
 
-## Strategy
+- pair selection
+- cointegration
+- hedge-ratio estimation
+- mean-reversion signals
+- portfolio construction
+- execution timing
+- transaction costs
+- portfolio-level risk
+- out-of-sample evaluation
 
-For each selected pair, the spread is defined as:
+The objective is to build a reproducible research pipeline rather than optimize the final test period for maximum historical performance.
 
-`spread = log(P1) - beta * log(P2)`
+---
 
-The spread is standardized using a 60-day rolling mean and standard deviation. A position is opened at Z = ±2.5 and closed when |Z| < 0.25. Signals are shifted by one trading day before returns are applied.
-
-Pair returns are normalized as:
-
-`pair_return = (r1 - beta * r2) / (1 + abs(beta))`
-
-## Important limitations
-
-- The supplied universe is a manually defined NIFTY 50 ticker list rather than a historical constituent database, so survivorship bias may remain.
-- The dataset begins in November 2017.
-- This is a daily-bar backtest and does not model intraday execution, bid/ask spread, borrow constraints, market impact, or order-book effects.
-- The final test period is kept separate from model selection and parameter tuning.
-
-## Repository structure
+## Research Pipeline
 
 ```text
-├── data/nifty50_prices.csv
-├── src/strategy.py
-├── outputs/plots/equity_curve.png
-├── outputs/plots/drawdown.png
-├── outputs/tables/strategy_metrics.csv
-├── outputs/tables/final_pairs.csv
-├── outputs/tables/pair_test_performance.csv
-├── outputs/tables/test_portfolio_returns.csv
-├── docs/INTERVIEW.md
-├── README.md
-└── requirements.txt
-```
+NIFTY 50 Daily Prices
+        │
+        ▼
+Candidate Pair Universe
+        │
+        ▼
+Training Period
+2017–2020
+        │
+        ├── Return Correlation Screening
+        │
+        ├── Engle–Granger Cointegration
+        │
+        └── OLS Hedge-Ratio Estimation
+        │
+        ▼
+Validation Period
+2021–2023
+        │
+        ├── Pair Performance Evaluation
+        ├── Pair Selection
+        └── Threshold Selection
+        │
+        ▼
+Freeze Model
+        │
+        ▼
+Untouched Test Period
+2024–2026
+        │
+        ▼
+One-Day Execution Lag
+        │
+        ▼
+Transaction Costs
+        │
+        ▼
+Portfolio P&L
+        │
+        ▼
+Risk & Performance Analysis
